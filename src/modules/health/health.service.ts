@@ -1,4 +1,5 @@
 import { redis } from '../../config/redis.js';
+import { prisma } from '../../config/prisma.js';
 
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -25,11 +26,21 @@ async function pingRedis(): Promise<'up' | 'down'> {
   }
 }
 
+async function pingDb(): Promise<'up' | 'down'> {
+  try {
+    await withTimeout(prisma.$queryRaw`SELECT 1`, 1000);
+    return 'up';
+  } catch {
+    return 'down';
+  }
+}
+
 export async function getHealth() {
-  const redisStatus = await pingRedis();
+  const [redisStatus, dbStatus] = await Promise.all([pingRedis(), pingDb()]);
   return {
-    status: redisStatus === 'up' ? 'ok' : 'degraded',
+    status: redisStatus === 'up' && dbStatus === 'up' ? 'ok' : 'degraded',
     uptimeSeconds: Math.round(process.uptime()),
+    db: dbStatus,
     redis: redisStatus,
   };
 }

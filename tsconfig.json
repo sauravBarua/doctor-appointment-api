@@ -3,8 +3,8 @@
     "target": "ES2023",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "rootDir": "src",
-    "outDir": "dist",
+    "rootDir": ".",
+    "noEmit": true,
     "types": ["node"],
     "strict": true,
     "noUncheckedIndexedAccess": true,
@@ -12,8 +12,7 @@
     "noFallthroughCasesInSwitch": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
-    "skipLibCheck": true,
-    "sourceMap": true
+    "skipLibCheck": true
   },
-  "include": ["src"]
+  "include": ["src", "prisma", "prisma.config.ts"]
 }

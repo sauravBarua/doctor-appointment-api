@@ -1,0 +1,214 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "esm"
+  importFileExtension = "js"
+  previewFeatures     = ["partialIndexes"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+enum AppointmentStatus {
+  BOOKED
+  CANCELLED
+  COMPLETED
+}
+
+// ───────────── Better Auth models ─────────────
+
+model User {
+  id                    String    @id
+  name                  String
+  email                 String    @unique
+  emailVerified         Boolean   @default(false)
+  image                 String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  // additionalFields (input: false in Better Auth config)
+  role                  Role      @default(PATIENT)
+  mustChangePassword    Boolean   @default(false)
+  tempPasswordExpiresAt DateTime?
+  // app-owned
+  isActive              Boolean   @default(true)
+
+  sessions              Session[]
+  accounts              Account[]
+  doctorProfile         Doctor?
+  appointments          Appointment[] @relation("PatientAppointments")
+  cancelledAppointments Appointment[] @relation("CancelledByUser")
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Jwks {
+  id         String    @id
+  publicKey  String
+  privateKey String
+  createdAt  DateTime  @default(now())
+  expiresAt  DateTime?
+
+  @@map("jwks")
+}
+
+// ───────────── Domain models ─────────────
+
+model Clinic {
+  id        String   @id @default(uuid())
+  name      String
+  city      String
+  address   String
+  timezone  String // IANA, e.g. Europe/Paris
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+
+  doctors Doctor[]
+
+  @@index([city])
+  @@map("clinics")
+}
+
+model Specialty {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  iconUrl   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+
+  doctors Doctor[]
+
+  @@map("specialties")
+}
+
+model Doctor {
+  id                  String   @id @default(uuid())
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+  clinicId            String
+  clinic              Clinic   @relation(fields: [clinicId], references: [id], onDelete: Restrict)
+  specialtyId         String
+  specialty           Specialty @relation(fields: [specialtyId], references: [id], onDelete: Restrict)
+  slotDurationMinutes Int      @default(30)
+  bio                 String?
+  isActive            Boolean  @default(true)
+  version             Int      @default(0)
+  createdAt           DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt           DateTime @updatedAt @db.Timestamptz(3)
+
+  availabilityRules AvailabilityRule[]
+  timeOffs          TimeOff[]
+  appointments      Appointment[]
+
+  @@index([clinicId])
+  @@index([specialtyId])
+  @@map("doctors")
+}
+
+model AvailabilityRule {
+  id          String   @id @default(uuid())
+  doctorId    String
+  doctor      Doctor   @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  weekday     Int // ISO: 1 = Monday ... 7 = Sunday
+  startMinute Int // minutes from local midnight, in the clinic timezone
+  endMinute   Int
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+
+  @@index([doctorId, weekday])
+  @@map("availability_rules")
+}
+
+model TimeOff {
+  id        String   @id @default(uuid())
+  doctorId  String
+  doctor    Doctor   @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  startTime DateTime @db.Timestamptz(3)
+  endTime   DateTime @db.Timestamptz(3)
+  reason    String?
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([doctorId, startTime])
+  @@map("time_off")
+}
+
+model Appointment {
+  id            String            @id @default(uuid())
+  doctorId      String
+  doctor        Doctor            @relation(fields: [doctorId], references: [id], onDelete: Restrict)
+  patientId     String
+  patient       User              @relation("PatientAppointments", fields: [patientId], references: [id], onDelete: Restrict)
+  startTime     DateTime          @db.Timestamptz(3)
+  endTime       DateTime          @db.Timestamptz(3)
+  status        AppointmentStatus @default(BOOKED)
+  cancelledById String?
+  cancelledBy   User?             @relation("CancelledByUser", fields: [cancelledById], references: [id], onDelete: SetNull)
+  cancelledAt   DateTime?         @db.Timestamptz(3)
+  cancelReason  String?
+  version       Int               @default(0)
+  createdAt     DateTime          @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime          @updatedAt @db.Timestamptz(3)
+
+  // Race-proof booking: at most one BOOKED row per doctor+slot, and per patient+time.
+  @@unique([doctorId, startTime], where: raw("\"status\" = 'BOOKED'"), map: "appointments_doctor_start_booked_key")
+  @@unique([patientId, startTime], where: raw("\"status\" = 'BOOKED'"), map: "appointments_patient_start_booked_key")
+  @@index([doctorId, startTime])
+  @@index([patientId, startTime])
+  @@index([status, createdAt])
+  @@map("appointments")
+}

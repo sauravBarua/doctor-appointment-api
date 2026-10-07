@@ -3,6 +3,7 @@ import { app } from './app.js';
 import { env } from './config/env.js';
 import { logger } from './config/logger.js';
 import { redis } from './config/redis.js';
+import { prisma } from './config/prisma.js';
 
 // Phase 10 attaches Socket.io to this http server.
 const server = createServer(app);
@@ -24,10 +25,7 @@ function shutdown(signal: string): void {
   logger.info({ signal }, 'Shutting down');
   setTimeout(() => process.exit(1), 10_000).unref();
   server.close(() => {
-    redis
-      .quit()
-      .catch(() => undefined)
-      .finally(() => process.exit(0));
+    Promise.allSettled([redis.quit(), prisma.$disconnect()]).finally(() => process.exit(0));
   });
 }
 
