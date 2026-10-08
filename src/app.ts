@@ -22,8 +22,14 @@ app.use(globalLimiter);
 
 // Better Auth's raw handler: mounted BEFORE express.json(), behind an allowlist.
 // Everything else under /api/auth/* is 404, so all auth goes through our validated routes.
-// Phase 4 adds the Google callback path here.
-const BETTER_AUTH_ALLOWLIST = new Set(['GET /api/auth/jwks']);
+const BETTER_AUTH_ALLOWLIST = new Set(['GET /api/auth/jwks', 'GET /api/auth/callback/google']);
+
+// Better Auth can send OAuth failures (for example a missing state cookie) to /api/auth/error.
+// Forward them to our own error page so they use the standard envelope.
+app.get('/api/auth/error', (req, res) => {
+  const query = req.originalUrl.split('?')[1];
+  res.redirect(`${API_PREFIX}/auth/google/error${query ? `?${query}` : ''}`);
+});
 
 app.all(
   '/api/auth/*splat',

@@ -8,3 +8,4 @@ export const OTP_LENGTH = 6;
 export const OTP_TTL_SECONDS = 300;
 export const OTP_MAX_ATTEMPTS = 3;
 export const OTP_RESEND_COOLDOWN_SECONDS = 60;
+export const GOOGLE_HANDOFF_TTL_SECONDS = 60;

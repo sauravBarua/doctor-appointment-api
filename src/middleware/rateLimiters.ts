@@ -103,3 +103,5 @@ export const otpVerifyLimiter = createLimiter({
   limit: 10,
   keyBy: 'email-ip',
 });
+
+export const googleLimiter = createLimiter({ name: 'google', windowMs: 15 * 60_000, limit: 20 });

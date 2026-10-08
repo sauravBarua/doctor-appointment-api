@@ -15,7 +15,7 @@ import type {
   VerifyEmailBody,
 } from './auth.schema.js';
 
-const publicUserSelect = {
+export const publicUserSelect = {
   id: true,
   name: true,
   email: true,
@@ -26,7 +26,7 @@ const publicUserSelect = {
   createdAt: true,
 } as const;
 
-function bearerHeaders(sessionToken: string): Headers {
+export function bearerHeaders(sessionToken: string): Headers {
   return new Headers({ authorization: `Bearer ${sessionToken}` });
 }
 
@@ -73,7 +73,7 @@ function mapAuthError(err: unknown): unknown {
   return err;
 }
 
-async function callAuth<T>(fn: () => Promise<T>): Promise<T> {
+export async function callAuth<T>(fn: () => Promise<T>): Promise<T> {
   try {
     return await fn();
   } catch (err) {
@@ -81,7 +81,7 @@ async function callAuth<T>(fn: () => Promise<T>): Promise<T> {
   }
 }
 
-async function issueAccessToken(sessionToken: string): Promise<string> {
+export async function issueAccessToken(sessionToken: string): Promise<string> {
   const { token } = await callAuth(() =>
     auth.api.getToken({ headers: bearerHeaders(sessionToken) }),
   );

@@ -44,6 +44,17 @@ export const auth = betterAuth({
       verify: ({ hash, password }) => verifyPassword(password, hash),
     },
   },
+  socialProviders: {
+    google: {
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+      prompt: 'select_account',
+      disableImplicitSignUp: true, // sign-up only when the request sets requestSignUp
+    },
+  },
+  account: {
+    accountLinking: { enabled: true, trustedProviders: ['google'] },
+  },
   plugins: [
     bearer(),
     jwt({
