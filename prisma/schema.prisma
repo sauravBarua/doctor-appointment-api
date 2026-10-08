@@ -99,6 +99,8 @@ model Jwks {
   id         String    @id
   publicKey  String
   privateKey String
+  alg        String?
+  crv        String?
   createdAt  DateTime  @default(now())
   expiresAt  DateTime?
 
@@ -212,3 +214,4 @@ model Appointment {
   @@index([status, createdAt])
   @@map("appointments")
 }
+

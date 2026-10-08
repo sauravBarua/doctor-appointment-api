@@ -1346,6 +1346,8 @@ export const JwksScalarFieldEnum = {
   id: 'id',
   publicKey: 'publicKey',
   privateKey: 'privateKey',
+  alg: 'alg',
+  crv: 'crv',
   createdAt: 'createdAt',
   expiresAt: 'expiresAt'
 } as const

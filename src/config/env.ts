@@ -12,6 +12,13 @@ const schema = z.object({
   REDIS_URL: z.url(),
   RABBITMQ_URL: z.url(),
   FRONTEND_URL: z.url(),
+  BETTER_AUTH_SECRET: z.string().min(32),
+  BETTER_AUTH_URL: z.url(),
+  SMTP_HOST: z.string().min(1),
+  SMTP_PORT: z.coerce.number().int().min(1).max(65535),
+  SMTP_USER: z.string().min(1),
+  SMTP_PASS: z.string().min(1),
+  MAIL_FROM: z.string().min(3),
 });
 
 const parsed = schema.safeParse(process.env);

@@ -28,6 +28,8 @@ export type JwksMinAggregateOutputType = {
   id: string | null
   publicKey: string | null
   privateKey: string | null
+  alg: string | null
+  crv: string | null
   createdAt: Date | null
   expiresAt: Date | null
 }
@@ -36,6 +38,8 @@ export type JwksMaxAggregateOutputType = {
   id: string | null
   publicKey: string | null
   privateKey: string | null
+  alg: string | null
+  crv: string | null
   createdAt: Date | null
   expiresAt: Date | null
 }
@@ -44,6 +48,8 @@ export type JwksCountAggregateOutputType = {
   id: number
   publicKey: number
   privateKey: number
+  alg: number
+  crv: number
   createdAt: number
   expiresAt: number
   _all: number
@@ -54,6 +60,8 @@ export type JwksMinAggregateInputType = {
   id?: true
   publicKey?: true
   privateKey?: true
+  alg?: true
+  crv?: true
   createdAt?: true
   expiresAt?: true
 }
@@ -62,6 +70,8 @@ export type JwksMaxAggregateInputType = {
   id?: true
   publicKey?: true
   privateKey?: true
+  alg?: true
+  crv?: true
   createdAt?: true
   expiresAt?: true
 }
@@ -70,6 +80,8 @@ export type JwksCountAggregateInputType = {
   id?: true
   publicKey?: true
   privateKey?: true
+  alg?: true
+  crv?: true
   createdAt?: true
   expiresAt?: true
   _all?: true
@@ -151,6 +163,8 @@ export type JwksGroupByOutputType = {
   id: string
   publicKey: string
   privateKey: string
+  alg: string | null
+  crv: string | null
   createdAt: Date
   expiresAt: Date | null
   _count: JwksCountAggregateOutputType | null
@@ -180,6 +194,8 @@ export type JwksWhereInput = {
   id?: Prisma.StringFilter<"Jwks"> | string
   publicKey?: Prisma.StringFilter<"Jwks"> | string
   privateKey?: Prisma.StringFilter<"Jwks"> | string
+  alg?: Prisma.StringNullableFilter<"Jwks"> | string | null
+  crv?: Prisma.StringNullableFilter<"Jwks"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Jwks"> | Date | string
   expiresAt?: Prisma.DateTimeNullableFilter<"Jwks"> | Date | string | null
 }
@@ -188,6 +204,8 @@ export type JwksOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   publicKey?: Prisma.SortOrder
   privateKey?: Prisma.SortOrder
+  alg?: Prisma.SortOrderInput | Prisma.SortOrder
+  crv?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
 }
@@ -199,6 +217,8 @@ export type JwksWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.JwksWhereInput | Prisma.JwksWhereInput[]
   publicKey?: Prisma.StringFilter<"Jwks"> | string
   privateKey?: Prisma.StringFilter<"Jwks"> | string
+  alg?: Prisma.StringNullableFilter<"Jwks"> | string | null
+  crv?: Prisma.StringNullableFilter<"Jwks"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Jwks"> | Date | string
   expiresAt?: Prisma.DateTimeNullableFilter<"Jwks"> | Date | string | null
 }, "id">
@@ -207,6 +227,8 @@ export type JwksOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   publicKey?: Prisma.SortOrder
   privateKey?: Prisma.SortOrder
+  alg?: Prisma.SortOrderInput | Prisma.SortOrder
+  crv?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.JwksCountOrderByAggregateInput
@@ -221,6 +243,8 @@ export type JwksScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Jwks"> | string
   publicKey?: Prisma.StringWithAggregatesFilter<"Jwks"> | string
   privateKey?: Prisma.StringWithAggregatesFilter<"Jwks"> | string
+  alg?: Prisma.StringNullableWithAggregatesFilter<"Jwks"> | string | null
+  crv?: Prisma.StringNullableWithAggregatesFilter<"Jwks"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Jwks"> | Date | string
   expiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Jwks"> | Date | string | null
 }
@@ -229,6 +253,8 @@ export type JwksCreateInput = {
   id: string
   publicKey: string
   privateKey: string
+  alg?: string | null
+  crv?: string | null
   createdAt?: Date | string
   expiresAt?: Date | string | null
 }
@@ -237,6 +263,8 @@ export type JwksUncheckedCreateInput = {
   id: string
   publicKey: string
   privateKey: string
+  alg?: string | null
+  crv?: string | null
   createdAt?: Date | string
   expiresAt?: Date | string | null
 }
@@ -245,6 +273,8 @@ export type JwksUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   publicKey?: Prisma.StringFieldUpdateOperationsInput | string
   privateKey?: Prisma.StringFieldUpdateOperationsInput | string
+  alg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  crv?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -253,6 +283,8 @@ export type JwksUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   publicKey?: Prisma.StringFieldUpdateOperationsInput | string
   privateKey?: Prisma.StringFieldUpdateOperationsInput | string
+  alg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  crv?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -261,6 +293,8 @@ export type JwksCreateManyInput = {
   id: string
   publicKey: string
   privateKey: string
+  alg?: string | null
+  crv?: string | null
   createdAt?: Date | string
   expiresAt?: Date | string | null
 }
@@ -269,6 +303,8 @@ export type JwksUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   publicKey?: Prisma.StringFieldUpdateOperationsInput | string
   privateKey?: Prisma.StringFieldUpdateOperationsInput | string
+  alg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  crv?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -277,6 +313,8 @@ export type JwksUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   publicKey?: Prisma.StringFieldUpdateOperationsInput | string
   privateKey?: Prisma.StringFieldUpdateOperationsInput | string
+  alg?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  crv?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -285,6 +323,8 @@ export type JwksCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   publicKey?: Prisma.SortOrder
   privateKey?: Prisma.SortOrder
+  alg?: Prisma.SortOrder
+  crv?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
 }
@@ -293,6 +333,8 @@ export type JwksMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   publicKey?: Prisma.SortOrder
   privateKey?: Prisma.SortOrder
+  alg?: Prisma.SortOrder
+  crv?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
 }
@@ -301,6 +343,8 @@ export type JwksMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   publicKey?: Prisma.SortOrder
   privateKey?: Prisma.SortOrder
+  alg?: Prisma.SortOrder
+  crv?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
 }
@@ -311,6 +355,8 @@ export type JwksSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   publicKey?: boolean
   privateKey?: boolean
+  alg?: boolean
+  crv?: boolean
   createdAt?: boolean
   expiresAt?: boolean
 }, ExtArgs["result"]["jwks"]>
@@ -319,6 +365,8 @@ export type JwksSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   publicKey?: boolean
   privateKey?: boolean
+  alg?: boolean
+  crv?: boolean
   createdAt?: boolean
   expiresAt?: boolean
 }, ExtArgs["result"]["jwks"]>
@@ -327,6 +375,8 @@ export type JwksSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   publicKey?: boolean
   privateKey?: boolean
+  alg?: boolean
+  crv?: boolean
   createdAt?: boolean
   expiresAt?: boolean
 }, ExtArgs["result"]["jwks"]>
@@ -335,11 +385,13 @@ export type JwksSelectScalar = {
   id?: boolean
   publicKey?: boolean
   privateKey?: boolean
+  alg?: boolean
+  crv?: boolean
   createdAt?: boolean
   expiresAt?: boolean
 }
 
-export type JwksOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "publicKey" | "privateKey" | "createdAt" | "expiresAt", ExtArgs["result"]["jwks"]>
+export type JwksOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "publicKey" | "privateKey" | "alg" | "crv" | "createdAt" | "expiresAt", ExtArgs["result"]["jwks"]>
 
 export type $JwksPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Jwks"
@@ -348,6 +400,8 @@ export type $JwksPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     publicKey: string
     privateKey: string
+    alg: string | null
+    crv: string | null
     createdAt: Date
     expiresAt: Date | null
   }, ExtArgs["result"]["jwks"]>
@@ -776,6 +830,8 @@ export interface JwksFieldRefs {
   readonly id: Prisma.FieldRef<"Jwks", 'String'>
   readonly publicKey: Prisma.FieldRef<"Jwks", 'String'>
   readonly privateKey: Prisma.FieldRef<"Jwks", 'String'>
+  readonly alg: Prisma.FieldRef<"Jwks", 'String'>
+  readonly crv: Prisma.FieldRef<"Jwks", 'String'>
   readonly createdAt: Prisma.FieldRef<"Jwks", 'DateTime'>
   readonly expiresAt: Prisma.FieldRef<"Jwks", 'DateTime'>
 }

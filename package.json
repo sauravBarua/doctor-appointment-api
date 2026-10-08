@@ -19,8 +19,11 @@
     "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
     "db:seed": "prisma db seed",
-    "db:reset": "prisma migrate reset"
+    "db:reset": "prisma migrate reset",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "lint-staged": {
     "*.{ts,mjs,js}": [
@@ -45,13 +48,18 @@
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "bcrypt": "^6.0.0",
+    "better-auth": "^1.7.7",
     "dotenv": "^18.0.5",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.7.1",
     "http-status": "^2.1.0",
     "ioredis": "^6.0.0",
+    "jose": "^6.2.12",
+    "nodemailer": "^10.0.15",
     "pg": "^8.23.1",
     "pino": "^10.4.0",
     "pino-http": "^11.0.0",
+    "rate-limit-redis": "^6.0.1",
     "zod": "^4.6.5"
   },
   "devDependencies": {
@@ -59,7 +67,9 @@
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/node": "^24.19.1",
+    "@types/nodemailer": "^8.0.2",
     "@types/pg": "^8.23.1",
+    "@types/supertest": "^7.2.1",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
@@ -67,8 +77,10 @@
     "pino-pretty": "^13.2.0",
     "prettier": "^3.9.9",
     "prisma": "^7.10.0",
+    "supertest": "^7.3.1",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.1"
+    "typescript-eslint": "^8.71.1",
+    "vitest": "^5.0.3"
   }
 }
