@@ -96,3 +96,8 @@ export type TimeOff = Prisma.TimeOffModel
  * 
  */
 export type Appointment = Prisma.AppointmentModel
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel
