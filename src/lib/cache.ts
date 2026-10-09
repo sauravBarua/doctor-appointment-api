@@ -41,3 +41,18 @@ export async function bumpSlotsVersion(doctorId: string): Promise<void> {
     logger.warn({ err, doctorId }, 'slots version bump failed');
   }
 }
+
+/** Clears the dashboards a booking or cancellation can change. */
+export async function invalidateDashboards(ids: {
+  doctorId?: string;
+  patientId?: string;
+}): Promise<void> {
+  const keys = ['dash:admin'];
+  if (ids.doctorId) keys.push(`dash:doctor:${ids.doctorId}`);
+  if (ids.patientId) keys.push(`dash:patient:${ids.patientId}`);
+  try {
+    await redis.del(...keys);
+  } catch (err) {
+    logger.warn({ err, keys }, 'dashboard cache invalidation failed');
+  }
+}

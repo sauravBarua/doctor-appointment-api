@@ -16,3 +16,4 @@ export const SLOT_DURATION_MINUTES = 30;
 export const MAX_SLOT_RANGE_DAYS = 14;
 export const BOOKING_HORIZON_DAYS = 60;
 export const CACHE_TTL_SECONDS = 60;
+export const DASHBOARD_TIMEZONE = 'Europe/Paris';
