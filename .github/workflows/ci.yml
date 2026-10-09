@@ -45,12 +45,27 @@ jobs:
     env:
       HUSKY: '0'
       NODE_ENV: test
+      PORT: '3000'
+      LOG_LEVEL: warn
+      TRUST_PROXY_HOPS: '0'
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/doctor_test
       REDIS_URL: redis://localhost:6379
       RABBITMQ_URL: amqp://rabbit:rabbit@localhost:5672
       FRONTEND_URL: http://localhost:5173
+      BETTER_AUTH_URL: http://localhost:3000
+      BETTER_AUTH_SECRET: ci-only-dummy-secret-0123456789-abcdefghijklmnop
       ADMIN_EMAIL: admin@ci.test
       ADMIN_PASSWORD: CiAdmin#Pass12345
+      SMTP_HOST: localhost
+      SMTP_PORT: '2525'
+      SMTP_USER: ci
+      SMTP_PASS: ci
+      MAIL_FROM: Clinic <no-reply@ci.test>
+      GOOGLE_CLIENT_ID: ci-google-client-id.apps.googleusercontent.com
+      GOOGLE_CLIENT_SECRET: ci-google-client-secret
+      CLOUDINARY_CLOUD_NAME: ci
+      CLOUDINARY_API_KEY: ci
+      CLOUDINARY_API_SECRET: ci
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -58,8 +73,6 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-      # Dummy CLOUDINARY_*/GOOGLE_*/SMTP_* values come from .env.example; the vars above win.
-      - run: cp .env.example .env
       - run: pnpm install --frozen-lockfile
       - run: pnpm prisma generate
       - run: pnpm lint
