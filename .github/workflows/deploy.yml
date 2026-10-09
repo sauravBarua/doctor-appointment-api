@@ -1,0 +1,55 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+concurrency: deploy
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 15
+    env:
+      HOST: ${{ secrets.DEPLOY_HOST }}
+      REMOTE_USER: ${{ secrets.DEPLOY_USER }}
+      DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+      - name: Copy compose files
+        run: |
+          scp -i ~/.ssh/id_deploy docker-compose.prod.yml Caddyfile "$REMOTE_USER@$HOST:$DEPLOY_PATH/"
+      - name: Roll out
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}"
+          printf '%s' "$GH_TOKEN" | ssh -i ~/.ssh/id_deploy "$REMOTE_USER@$HOST" bash -s <<EOF
+          set -euo pipefail
+          cd "$DEPLOY_PATH"
+          docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          export API_IMAGE="$IMAGE:$GITHUB_SHA" MIGRATE_IMAGE="$IMAGE-migrate:$GITHUB_SHA"
+          C="docker compose --env-file .env.production -f docker-compose.prod.yml"
+          \$C pull api migrate
+          \$C up -d --remove-orphans
+          for i in \$(seq 1 30); do
+            s=\$(docker inspect --format '{{.State.Health.Status}}' "\$(\$C ps -q api)" 2>/dev/null || true)
+            [ "\$s" = healthy ] && echo "api healthy" && exit 0
+            sleep 4
+          done
+          \$C logs --tail 80 api migrate
+          echo "api did not become healthy" >&2
+          exit 1
+          EOF

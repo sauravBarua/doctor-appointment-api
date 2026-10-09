@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: doctor_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s
+          --health-timeout 5s --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping" --health-interval 5s
+          --health-timeout 3s --health-retries 10
+      rabbitmq:
+        image: rabbitmq:3.13-alpine
+        env:
+          RABBITMQ_DEFAULT_USER: rabbit
+          RABBITMQ_DEFAULT_PASS: rabbit
+        ports: ['5672:5672']
+        options: >-
+          --health-cmd "rabbitmq-diagnostics -q ping" --health-interval 10s
+          --health-timeout 10s --health-retries 10
+    env:
+      HUSKY: '0'
+      NODE_ENV: test
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/doctor_test
+      REDIS_URL: redis://localhost:6379
+      RABBITMQ_URL: amqp://rabbit:rabbit@localhost:5672
+      FRONTEND_URL: http://localhost:5173
+      ADMIN_EMAIL: admin@ci.test
+      ADMIN_PASSWORD: CiAdmin#Pass12345
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      # Dummy CLOUDINARY_*/GOOGLE_*/SMTP_* values come from .env.example; the vars above win.
+      - run: cp .env.example .env
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm prisma generate
+      - run: pnpm lint
+      - run: pnpm exec prettier --check .
+      - run: pnpm typecheck
+      - run: pnpm prisma migrate deploy
+      - run: pnpm test
+      - run: pnpm build
+
+  docker:
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lowercase image name
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        if: github.event_name == 'push'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build (and push on main) the API image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: runtime
+          push: ${{ github.event_name == 'push' }}
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,mode=max,scope=api
+      - name: Build (and push on main) the migration image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: migrate
+          push: ${{ github.event_name == 'push' }}
+          tags: |
+            ${{ env.IMAGE }}-migrate:latest
+            ${{ env.IMAGE }}-migrate:${{ github.sha }}
+          cache-from: type=gha,scope=migrate
+          cache-to: type=gha,mode=max,scope=migrate

@@ -24,7 +24,14 @@ app.use('/api', docsRouter); // before global helmet: has its own relaxed helmet
 app.use(helmet()); // strict defaults for everything else
 
 app.use(
-  pinoHttp({ logger, autoLogging: { ignore: (req) => req.url?.endsWith('/health') ?? false } }),
+  pinoHttp({
+    logger,
+    redact: {
+      paths: ['req.headers.authorization', 'req.headers.cookie', 'res.headers["set-cookie"]'],
+      censor: '[redacted]',
+    },
+    autoLogging: { ignore: (req) => req.url?.endsWith('/health') ?? false },
+  }),
 );
 app.use(globalLimiter);
 
