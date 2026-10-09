@@ -79,6 +79,7 @@ jobs:
       - run: pnpm exec prettier --check .
       - run: pnpm typecheck
       - run: pnpm prisma migrate deploy
+      - run: pnpm db:seed
       - run: pnpm test
       - run: pnpm build
 
