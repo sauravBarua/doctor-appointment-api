@@ -1,9 +1,13 @@
 import { toNodeHandler } from 'better-auth/node';
+import cors from 'cors';
 import express from 'express';
+import helmet from 'helmet';
 import { pinoHttp } from 'pino-http';
 import { API_PREFIX } from './config/constants.js';
+import { corsOptions } from './config/cors.js';
 import { env } from './config/env.js';
 import { logger } from './config/logger.js';
+import { docsRouter } from './docs/docs.router.js';
 import { auth } from './lib/auth.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { notFound } from './middleware/notFound.js';
@@ -14,6 +18,10 @@ export const app = express();
 
 app.disable('x-powered-by');
 app.set('trust proxy', env.TRUST_PROXY_HOPS);
+
+app.use(cors(corsOptions)); // before the limiter so preflights are never rate limited
+app.use('/api', docsRouter); // before global helmet: has its own relaxed helmet
+app.use(helmet()); // strict defaults for everything else
 
 app.use(
   pinoHttp({ logger, autoLogging: { ignore: (req) => req.url?.endsWith('/health') ?? false } }),
