@@ -11,6 +11,7 @@ import {
 } from './specialties/specialties.route.js';
 import { usersRouter } from './users/users.route.js';
 import { scheduleRouter } from './schedule/schedule.route.js';
+import { doctorsPublicRouter } from './doctors/doctorsPublic.route.js';
 
 export const apiRouter: Router = Router();
 
@@ -25,3 +26,4 @@ apiRouter.use('/admin/specialties', specialtiesAdminRouter);
 apiRouter.use('/admin/clinics', clinicsAdminRouter);
 apiRouter.use('/admin/doctors', doctorsAdminRouter);
 apiRouter.use('/doctor', scheduleRouter);
+apiRouter.use('/doctors', doctorsPublicRouter);

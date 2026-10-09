@@ -13,3 +13,6 @@ export const TEMP_PASSWORD_TTL_HOURS = 24;
 export const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 export const IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const;
 export const SLOT_DURATION_MINUTES = 30;
+export const MAX_SLOT_RANGE_DAYS = 14;
+export const BOOKING_HORIZON_DAYS = 60;
+export const CACHE_TTL_SECONDS = 60;

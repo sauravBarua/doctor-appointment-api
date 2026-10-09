@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import { SLOT_DURATION_MINUTES } from '../../config/constants.js';
 import { prisma } from '../../config/prisma.js';
 import type { Prisma } from '../../generated/prisma/client.js';
+import { bumpSlotsVersion } from '../../lib/cache.js';
 import { AppError } from '../../utils/AppError.js';
 import { ErrorCode } from '../../utils/errorCodes.js';
 import type {
@@ -86,6 +87,7 @@ export async function createRule(doctorId: string, input: CreateRuleBody) {
     await assertNoOverlap(tx, doctorId, input.weekday, input.startMinute, input.endMinute);
     return tx.availabilityRule.create({ data: { doctorId, ...input }, select: ruleSelect });
   });
+  await bumpSlotsVersion(doctorId);
   return toRuleDto(rule);
 }
 
@@ -112,16 +114,18 @@ export async function updateRule(doctorId: string, id: string, input: UpdateRule
     await assertNoOverlap(tx, doctorId, next.weekday, next.startMinute, next.endMinute, id);
     return tx.availabilityRule.update({ where: { id }, data: next, select: ruleSelect });
   });
+  await bumpSlotsVersion(doctorId);
   return toRuleDto(rule);
 }
 
 export async function deleteRule(doctorId: string, id: string) {
   const { count } = await prisma.availabilityRule.deleteMany({ where: { id, doctorId } });
   if (count === 0) throw notFound('Availability rule');
+  await bumpSlotsVersion(doctorId);
 }
 
 export async function createTimeOff(doctorId: string, input: CreateTimeOffBody) {
-  return prisma.$transaction(async (tx) => {
+  const created = await prisma.$transaction(async (tx) => {
     await lockDoctor(tx, doctorId);
 
     const overlap = await tx.timeOff.findFirst({
@@ -161,6 +165,8 @@ export async function createTimeOff(doctorId: string, input: CreateTimeOffBody) 
 
     return tx.timeOff.create({ data: { doctorId, ...input }, select: timeOffSelect });
   });
+  await bumpSlotsVersion(doctorId);
+  return created;
 }
 
 export async function listTimeOff(doctorId: string, q: ListTimeOffQuery) {
@@ -185,4 +191,5 @@ export async function listTimeOff(doctorId: string, q: ListTimeOffQuery) {
 export async function deleteTimeOff(doctorId: string, id: string) {
   const { count } = await prisma.timeOff.deleteMany({ where: { id, doctorId } });
   if (count === 0) throw notFound('Time off');
+  await bumpSlotsVersion(doctorId);
 }
