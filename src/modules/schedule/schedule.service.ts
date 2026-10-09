@@ -5,6 +5,7 @@ import type { Prisma } from '../../generated/prisma/client.js';
 import { bumpSlotsVersion } from '../../lib/cache.js';
 import { AppError } from '../../utils/AppError.js';
 import { ErrorCode } from '../../utils/errorCodes.js';
+import { lockDoctorRow } from '../../utils/locks.js';
 import type {
   CreateRuleBody,
   CreateTimeOffBody,
@@ -26,14 +27,6 @@ const timeOffSelect = { id: true, startTime: true, endTime: true, reason: true }
 
 const notFound = (what: string) =>
   new AppError(httpStatus.NOT_FOUND, ErrorCode.NOT_FOUND, `${what} not found`);
-
-/** A no-op write takes the doctor's row lock until the transaction ends. Phase 8 booking must do the same. */
-async function lockDoctor(tx: Prisma.TransactionClient, doctorId: string) {
-  await tx.doctor.update({
-    where: { id: doctorId },
-    data: { slotDurationMinutes: SLOT_DURATION_MINUTES },
-  });
-}
 
 export async function getDoctorContext(userId: string) {
   const doctor = await prisma.doctor.findUnique({
@@ -83,7 +76,7 @@ export async function listRules(doctorId: string, timezone: string) {
 
 export async function createRule(doctorId: string, input: CreateRuleBody) {
   const rule = await prisma.$transaction(async (tx) => {
-    await lockDoctor(tx, doctorId);
+    await lockDoctorRow(tx, doctorId);
     await assertNoOverlap(tx, doctorId, input.weekday, input.startMinute, input.endMinute);
     return tx.availabilityRule.create({ data: { doctorId, ...input }, select: ruleSelect });
   });
@@ -93,7 +86,7 @@ export async function createRule(doctorId: string, input: CreateRuleBody) {
 
 export async function updateRule(doctorId: string, id: string, input: UpdateRuleBody) {
   const rule = await prisma.$transaction(async (tx) => {
-    await lockDoctor(tx, doctorId);
+    await lockDoctorRow(tx, doctorId);
     const existing = await tx.availabilityRule.findFirst({
       where: { id, doctorId },
       select: ruleSelect,
@@ -126,7 +119,7 @@ export async function deleteRule(doctorId: string, id: string) {
 
 export async function createTimeOff(doctorId: string, input: CreateTimeOffBody) {
   const created = await prisma.$transaction(async (tx) => {
-    await lockDoctor(tx, doctorId);
+    await lockDoctorRow(tx, doctorId);
 
     const overlap = await tx.timeOff.findFirst({
       where: { doctorId, startTime: { lt: input.endTime }, endTime: { gt: input.startTime } },

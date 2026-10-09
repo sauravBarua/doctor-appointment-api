@@ -12,6 +12,7 @@ import {
 import { usersRouter } from './users/users.route.js';
 import { scheduleRouter } from './schedule/schedule.route.js';
 import { doctorsPublicRouter } from './doctors/doctorsPublic.route.js';
+import { appointmentsRouter } from './appointments/appointments.route.js';
 
 export const apiRouter: Router = Router();
 
@@ -27,3 +28,4 @@ apiRouter.use('/admin/clinics', clinicsAdminRouter);
 apiRouter.use('/admin/doctors', doctorsAdminRouter);
 apiRouter.use('/doctor', scheduleRouter);
 apiRouter.use('/doctors', doctorsPublicRouter);
+apiRouter.use('/appointments', appointmentsRouter);

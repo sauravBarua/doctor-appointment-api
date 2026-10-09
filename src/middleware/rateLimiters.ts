@@ -12,7 +12,7 @@ type LimiterConfig = {
   name: string;
   windowMs: number;
   limit: number;
-  keyBy?: 'ip' | 'email-ip';
+  keyBy?: 'ip' | 'email-ip' | 'user';
   failClosed?: boolean; // default: fail open when Redis is unreachable
   enforceInTest?: boolean;
   skip?: (req: Request) => boolean;
@@ -48,6 +48,7 @@ export function createLimiter(config: LimiterConfig) {
       },
     }),
     keyGenerator: (req) => {
+      if (config.keyBy === 'user' && req.user) return `user:${req.user.id}`;
       const ip = ipKeyGenerator(req.ip ?? '');
       if (config.keyBy === 'email-ip') {
         const email = emailFrom(req);
@@ -105,3 +106,11 @@ export const otpVerifyLimiter = createLimiter({
 });
 
 export const googleLimiter = createLimiter({ name: 'google', windowMs: 15 * 60_000, limit: 20 });
+
+export const bookingLimiter = createLimiter({
+  name: 'booking',
+  windowMs: 60 * 60_000,
+  limit: 20,
+  keyBy: 'user',
+  enforceInTest: true,
+});
