@@ -115,6 +115,7 @@ model Clinic {
   name      String
   city      String
   address   String
+  imageUrl  String?
   timezone  String // IANA, e.g. Europe/Paris
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now()) @db.Timestamptz(3)

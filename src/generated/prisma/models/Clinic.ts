@@ -29,6 +29,7 @@ export type ClinicMinAggregateOutputType = {
   name: string | null
   city: string | null
   address: string | null
+  imageUrl: string | null
   timezone: string | null
   isActive: boolean | null
   createdAt: Date | null
@@ -40,6 +41,7 @@ export type ClinicMaxAggregateOutputType = {
   name: string | null
   city: string | null
   address: string | null
+  imageUrl: string | null
   timezone: string | null
   isActive: boolean | null
   createdAt: Date | null
@@ -51,6 +53,7 @@ export type ClinicCountAggregateOutputType = {
   name: number
   city: number
   address: number
+  imageUrl: number
   timezone: number
   isActive: number
   createdAt: number
@@ -64,6 +67,7 @@ export type ClinicMinAggregateInputType = {
   name?: true
   city?: true
   address?: true
+  imageUrl?: true
   timezone?: true
   isActive?: true
   createdAt?: true
@@ -75,6 +79,7 @@ export type ClinicMaxAggregateInputType = {
   name?: true
   city?: true
   address?: true
+  imageUrl?: true
   timezone?: true
   isActive?: true
   createdAt?: true
@@ -86,6 +91,7 @@ export type ClinicCountAggregateInputType = {
   name?: true
   city?: true
   address?: true
+  imageUrl?: true
   timezone?: true
   isActive?: true
   createdAt?: true
@@ -170,6 +176,7 @@ export type ClinicGroupByOutputType = {
   name: string
   city: string
   address: string
+  imageUrl: string | null
   timezone: string
   isActive: boolean
   createdAt: Date
@@ -202,6 +209,7 @@ export type ClinicWhereInput = {
   name?: Prisma.StringFilter<"Clinic"> | string
   city?: Prisma.StringFilter<"Clinic"> | string
   address?: Prisma.StringFilter<"Clinic"> | string
+  imageUrl?: Prisma.StringNullableFilter<"Clinic"> | string | null
   timezone?: Prisma.StringFilter<"Clinic"> | string
   isActive?: Prisma.BoolFilter<"Clinic"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Clinic"> | Date | string
@@ -214,6 +222,7 @@ export type ClinicOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   city?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   timezone?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -229,6 +238,7 @@ export type ClinicWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Clinic"> | string
   city?: Prisma.StringFilter<"Clinic"> | string
   address?: Prisma.StringFilter<"Clinic"> | string
+  imageUrl?: Prisma.StringNullableFilter<"Clinic"> | string | null
   timezone?: Prisma.StringFilter<"Clinic"> | string
   isActive?: Prisma.BoolFilter<"Clinic"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Clinic"> | Date | string
@@ -241,6 +251,7 @@ export type ClinicOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   city?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   timezone?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -258,6 +269,7 @@ export type ClinicScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Clinic"> | string
   city?: Prisma.StringWithAggregatesFilter<"Clinic"> | string
   address?: Prisma.StringWithAggregatesFilter<"Clinic"> | string
+  imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Clinic"> | string | null
   timezone?: Prisma.StringWithAggregatesFilter<"Clinic"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"Clinic"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Clinic"> | Date | string
@@ -269,6 +281,7 @@ export type ClinicCreateInput = {
   name: string
   city: string
   address: string
+  imageUrl?: string | null
   timezone: string
   isActive?: boolean
   createdAt?: Date | string
@@ -281,6 +294,7 @@ export type ClinicUncheckedCreateInput = {
   name: string
   city: string
   address: string
+  imageUrl?: string | null
   timezone: string
   isActive?: boolean
   createdAt?: Date | string
@@ -293,6 +307,7 @@ export type ClinicUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -305,6 +320,7 @@ export type ClinicUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -317,6 +333,7 @@ export type ClinicCreateManyInput = {
   name: string
   city: string
   address: string
+  imageUrl?: string | null
   timezone: string
   isActive?: boolean
   createdAt?: Date | string
@@ -328,6 +345,7 @@ export type ClinicUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -339,6 +357,7 @@ export type ClinicUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -350,6 +369,7 @@ export type ClinicCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   city?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -361,6 +381,7 @@ export type ClinicMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   city?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -372,6 +393,7 @@ export type ClinicMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   city?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -402,6 +424,7 @@ export type ClinicCreateWithoutDoctorsInput = {
   name: string
   city: string
   address: string
+  imageUrl?: string | null
   timezone: string
   isActive?: boolean
   createdAt?: Date | string
@@ -413,6 +436,7 @@ export type ClinicUncheckedCreateWithoutDoctorsInput = {
   name: string
   city: string
   address: string
+  imageUrl?: string | null
   timezone: string
   isActive?: boolean
   createdAt?: Date | string
@@ -440,6 +464,7 @@ export type ClinicUpdateWithoutDoctorsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -451,6 +476,7 @@ export type ClinicUncheckedUpdateWithoutDoctorsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -493,6 +519,7 @@ export type ClinicSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name?: boolean
   city?: boolean
   address?: boolean
+  imageUrl?: boolean
   timezone?: boolean
   isActive?: boolean
   createdAt?: boolean
@@ -506,6 +533,7 @@ export type ClinicSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   name?: boolean
   city?: boolean
   address?: boolean
+  imageUrl?: boolean
   timezone?: boolean
   isActive?: boolean
   createdAt?: boolean
@@ -517,6 +545,7 @@ export type ClinicSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   name?: boolean
   city?: boolean
   address?: boolean
+  imageUrl?: boolean
   timezone?: boolean
   isActive?: boolean
   createdAt?: boolean
@@ -528,13 +557,14 @@ export type ClinicSelectScalar = {
   name?: boolean
   city?: boolean
   address?: boolean
+  imageUrl?: boolean
   timezone?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ClinicOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "city" | "address" | "timezone" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["clinic"]>
+export type ClinicOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "city" | "address" | "imageUrl" | "timezone" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["clinic"]>
 export type ClinicInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   doctors?: boolean | Prisma.Clinic$doctorsArgs<ExtArgs>
   _count?: boolean | Prisma.ClinicCountOutputTypeDefaultArgs<ExtArgs>
@@ -552,6 +582,7 @@ export type $ClinicPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     name: string
     city: string
     address: string
+    imageUrl: string | null
     timezone: string
     isActive: boolean
     createdAt: Date
@@ -984,6 +1015,7 @@ export interface ClinicFieldRefs {
   readonly name: Prisma.FieldRef<"Clinic", 'String'>
   readonly city: Prisma.FieldRef<"Clinic", 'String'>
   readonly address: Prisma.FieldRef<"Clinic", 'String'>
+  readonly imageUrl: Prisma.FieldRef<"Clinic", 'String'>
   readonly timezone: Prisma.FieldRef<"Clinic", 'String'>
   readonly isActive: Prisma.FieldRef<"Clinic", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Clinic", 'DateTime'>

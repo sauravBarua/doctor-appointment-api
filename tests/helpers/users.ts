@@ -2,15 +2,25 @@ import { randomUUID } from 'node:crypto';
 import { prisma } from '../../src/config/prisma.js';
 import { hashPassword } from '../../src/lib/password.js';
 
+export interface CreateVerifiedUserInput {
+  email: string;
+  password?: string;
+  name?: string;
+  role?: 'PATIENT' | 'DOCTOR' | 'ADMIN';
+}
+// in the destructuring: role = 'PATIENT',
+// in prisma.user.create data: role,
+
 export async function createVerifiedUser(input: {
   email: string;
-  password: string;
+  password?: string;
   role?: 'PATIENT' | 'DOCTOR' | 'ADMIN';
   mustChangePassword?: boolean;
   isActive?: boolean;
-}): Promise<string> {
+}) {
   const id = randomUUID();
-  await prisma.user.create({
+  const password = input.password ?? 'Str0ngPassw0rd';
+  const user = await prisma.user.create({
     data: {
       id,
       name: 'Test User',
@@ -25,10 +35,10 @@ export async function createVerifiedUser(input: {
           id: randomUUID(),
           accountId: id,
           providerId: 'credential',
-          password: await hashPassword(input.password),
+          password: await hashPassword(password),
         },
       },
     },
   });
-  return id;
+  return { user, password };
 }

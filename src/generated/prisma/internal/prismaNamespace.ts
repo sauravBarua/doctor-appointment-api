@@ -1435,6 +1435,7 @@ export const ClinicScalarFieldEnum = {
   name: 'name',
   city: 'city',
   address: 'address',
+  imageUrl: 'imageUrl',
   timezone: 'timezone',
   isActive: 'isActive',
   createdAt: 'createdAt',

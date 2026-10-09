@@ -18,13 +18,15 @@ import { redis } from '../src/config/redis.js';
 import { hashPassword } from '../src/lib/password.js';
 import { errorHandler } from '../src/middleware/errorHandler.js';
 import { requireAuth } from '../src/middleware/requireAuth.js';
-import { DEMO_PASSWORD, loginAs } from './helpers/auth.js';
+import { loginAs } from './helpers/auth.js';
+import { createVerifiedUser } from './helpers/users.js';
 
 const base = '/api/v1/auth';
 const run = randomUUID().slice(0, 8);
 const email = `test-${run}@example.com`;
 const gateEmail = `gate-${run}@example.com`;
 const expiredEmail = `expired-${run}@example.com`;
+const helperEmail = `helper-${run}@example.com`;
 const password = 'Str0ngPassw0rd';
 const tempPassword = 'Temp0rary-Pass1';
 
@@ -52,7 +54,7 @@ async function createDoctorUser(userEmail: string, expiresAt: Date) {
 }
 
 afterAll(async () => {
-  const emails = [email, gateEmail, expiredEmail];
+  const emails = [email, gateEmail, expiredEmail, helperEmail];
   await prisma.user.deleteMany({ where: { email: { in: emails } } });
   await prisma.verification.deleteMany({ where: { identifier: { contains: `-${run}@` } } });
   await redis.del(`otp:cooldown:${email}`);
@@ -115,9 +117,10 @@ describe('registration and login', () => {
   });
 });
 
-describe('seeded users', () => {
-  it('logs in the seeded patient through the helper and calls /auth/me', async () => {
-    const { accessToken } = await loginAs('patient@demo.local', DEMO_PASSWORD);
+describe('verified user', () => {
+  it('logs in through the helper and calls /auth/me', async () => {
+    const { user, password } = await createVerifiedUser({ email: helperEmail });
+    const { accessToken } = await loginAs(user.email, password);
     const res = await request(app).get(`${base}/me`).set('Authorization', `Bearer ${accessToken}`);
     expect(res.status).toBe(200);
     expect(res.body.data.role).toBe('PATIENT');
