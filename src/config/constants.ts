@@ -17,3 +17,5 @@ export const MAX_SLOT_RANGE_DAYS = 14;
 export const BOOKING_HORIZON_DAYS = 60;
 export const CACHE_TTL_SECONDS = 60;
 export const DASHBOARD_TIMEZONE = 'Europe/Paris';
+export const SOCKET_MAX_AGE_MS = 10 * 60_000; // matches the 10-minute access token
+export const HANDLER_MAX_ATTEMPTS = 3;

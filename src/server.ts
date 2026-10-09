@@ -2,11 +2,14 @@ import { createServer } from 'node:http';
 import { app } from './app.js';
 import { env } from './config/env.js';
 import { logger } from './config/logger.js';
-import { redis } from './config/redis.js';
 import { prisma } from './config/prisma.js';
+import { redis } from './config/redis.js';
+import { startMessaging, stopMessaging } from './messaging/broker.js';
+import { processAppointmentEvent } from './modules/notifications/notifications.handler.js';
+import { attachRealtime } from './realtime/socket.js';
 
-// Phase 10 attaches Socket.io to this http server.
 const server = createServer(app);
+const io = attachRealtime(server);
 
 server.on('error', (err) => {
   logger.fatal({ err }, 'Server failed to start');
@@ -15,6 +18,7 @@ server.on('error', (err) => {
 
 server.listen(env.PORT, () => {
   logger.info(`Server listening on http://localhost:${env.PORT}`);
+  void startMessaging({ consumer: processAppointmentEvent });
 });
 
 let shuttingDown = false;
@@ -24,8 +28,11 @@ function shutdown(signal: string): void {
   shuttingDown = true;
   logger.info({ signal }, 'Shutting down');
   setTimeout(() => process.exit(1), 10_000).unref();
-  server.close(() => {
-    Promise.allSettled([redis.quit(), prisma.$disconnect()]).finally(() => process.exit(0));
+  // io.close() disconnects the sockets and closes the HTTP server too.
+  void io.close(() => {
+    stopMessaging()
+      .then(() => Promise.allSettled([redis.quit(), prisma.$disconnect()]))
+      .finally(() => process.exit(0));
   });
 }
 

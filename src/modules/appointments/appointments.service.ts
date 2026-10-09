@@ -4,6 +4,7 @@ import { BOOKING_HORIZON_DAYS, SLOT_DURATION_MINUTES } from '../../config/consta
 import { prisma } from '../../config/prisma.js';
 import type { Prisma } from '../../generated/prisma/client.js';
 import { bumpSlotsVersion, invalidateDashboards } from '../../lib/cache.js';
+import { publishAppointmentEvent } from '../../messaging/events.js';
 import { AppError } from '../../utils/AppError.js';
 import { ErrorCode } from '../../utils/errorCodes.js';
 import { lockDoctorRow } from '../../utils/locks.js';
@@ -138,6 +139,11 @@ export async function bookAppointment(patientId: string, input: BookBody) {
     });
     await bumpSlotsVersion(doctorId);
     await invalidateDashboards({ doctorId, patientId });
+    await publishAppointmentEvent({
+      type: 'appointment.booked',
+      appointmentId: created.id,
+      actor: { id: patientId, role: 'PATIENT' },
+    });
     return toDto(created);
   } catch (err) {
     throw uniqueViolation(err) ?? err;
@@ -184,6 +190,12 @@ export async function cancelAppointment(actor: Actor, id: string, reason?: strin
 
   await bumpSlotsVersion(appt.doctor.id);
   await invalidateDashboards({ doctorId: appt.doctor.id, patientId: appt.patient.id });
+  await publishAppointmentEvent({
+    type: 'appointment.cancelled',
+    appointmentId: id,
+    actor: { id: actor.id, role: actor.role },
+    reason: reason ?? null,
+  });
   return toDto(await prisma.appointment.findUniqueOrThrow({ where: { id }, select }));
 }
 
