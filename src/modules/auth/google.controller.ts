@@ -8,7 +8,8 @@ import { sendResponse } from '../../utils/sendResponse.js';
 import type { GoogleErrorQuery, GoogleExchangeBody } from './google.schema.js';
 import * as google from './google.service.js';
 
-const isProduction = env.NODE_ENV === 'production';
+// Redirect to the frontend everywhere except automated tests, which assert on the JSON.
+const redirectToFrontend = env.NODE_ENV !== 'test';
 
 const frontendErrorUrl = (code: string) =>
   `${env.FRONTEND_URL}/auth/error?code=${encodeURIComponent(code)}`;
@@ -26,7 +27,7 @@ export async function googleSuccess(req: Request, res: Response) {
   try {
     const result = await google.completeGoogleAuth(fromNodeHeaders(req.headers));
 
-    if (isProduction) {
+    if (redirectToFrontend) {
       const code = await google.createHandoffCode(result.sessionToken);
       res.redirect(`${env.FRONTEND_URL}/auth/callback?code=${encodeURIComponent(code)}`);
       return;
@@ -44,7 +45,7 @@ export async function googleSuccess(req: Request, res: Response) {
       },
     });
   } catch (err) {
-    if (isProduction && err instanceof AppError) {
+    if (redirectToFrontend && err instanceof AppError) {
       res.redirect(frontendErrorUrl(err.code));
       return;
     }
@@ -56,7 +57,7 @@ export function googleError(_req: Request, res: Response) {
   const { query } = getValidated<unknown, GoogleErrorQuery>(res);
   const mapped = google.mapGoogleError(query.error);
 
-  if (isProduction) {
+  if (redirectToFrontend) {
     res.redirect(frontendErrorUrl(mapped.code));
     return;
   }
