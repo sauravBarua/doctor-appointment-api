@@ -1,0 +1,199 @@
+
+=== POST /auth/login
+status: 200
+{"success":true,"message":"Signed in","meta":null,"data":{"accessToken":"[redacted]","sessionToken":"[redacted]","mustChangePassword":false,"user":{"id":"868c94fb-0f75-40ce-95e5-6bfece7cafb1","name":"Platform Admin","email":"saurav.barua.dev@gmail.com","image":null,"role":"ADMIN","emailVerified":true,"mustChangePassword":false,"createdAt":"2026-10-09T09:37:34.136Z"}}}
+
+=== GET /admin/specialties?page=1&pageSize=3
+status: 200
+{"success":true,"message":"Specialties","meta":{"page":1,"pageSize":3,"total":5},"data":[{"id":"d42337f7-43b8-4a20-94cf-90b84e9df089","name":"Cardiology","iconUrl":"https://res.cloudinary.com/pl8gvkwv/image/upload/v1791540610/doctor-booking/specialties/specialty-d42337f7-43b8-4a20-94cf-90b84e9df089.png","isActive":true,"createdAt":"2026-10-09T10:10:10.969Z","updatedAt":"2026-10-09T10:10:10.969Z"},{"id":"660e9044-1020-4a4f-89b0-c3d82ffe9f82","name":"E2E Cardio 1791555620612","iconUrl":null,"isActive":true,"createdAt":"2026-10-09T14:20:21.104Z","updatedAt":"2026-10-09T14:20:21.104Z"},{"id":"1de80e7f-fe1f-4b49-b7f5-b4a82b6aacbe","name":"E2E Cardio 1791555774889","iconUrl":null,"isActive":true,"createdAt":"2026-10-09T14:22:55.361Z","updatedAt":"2026-10-09T14:22:55.361Z"}]}
+
+=== GET /admin/clinics?page=1&pageSize=3
+status: 200
+{"success":true,"message":"Clinics","meta":{"page":1,"pageSize":3,"total":5},"data":[{"id":"75c004ad-6356-4fbe-9bed-b6e7d4e02af4","name":"Clinique de La Muette","city":"Paris","address":"46 Rue Nicolo, 75116 Paris","imageUrl":"https://res.cloudinary.com/pl8gvkwv/image/upload/v1791540784/doctor-booking/clinics/clinic-75c004ad-6356-4fbe-9bed-b6e7d4e02af4.png","timezone":"Europe/Paris","isActive":true,"createdAt":"2026-10-09T10:13:05.025Z","updatedAt":"2026-10-09T10:13:05.025Z"},{"id":"45e081c4-02d5-4356-8bdb-988d8c01e480","name":"E2E Clinic 1791555620612","city":"Paris","address":"1 Rue Test","imageUrl":null,"timezone":"Europe/Paris","isActive":true,"createdAt":"2026-10-09T14:20:21.143Z","updatedAt":"2026-10-09T14:20:21.143Z"},{"id":"05254e38-d2ba-4c10-86c6-14c3ea262038","name":"E2E Clinic 1791555774889","city":"Paris","address":"1 Rue Test","imageUrl":null,"timezone":"Europe/Paris","isActive":true,"createdAt":"2026-10-09T14:22:55.399Z","updatedAt":"2026-10-09T14:22:55.399Z"}]}
+
+=== GET /admin/doctors?page=1&pageSize=3
+status: 200
+{"success":true,"message":"Doctors","meta":{"page":1,"pageSize":3,"total":5},"data":[{"id":"cfb56c72-9609-44c3-a539-65e5201eba2a","slotDurationMinutes":30,"bio":null,"isActive":true,"createdAt":"2026-10-09T15:57:53.891Z","updatedAt":"2026-10-09T15:57:56.279Z","user":{"id":"2cf2a113-9313-4d3a-8423-9457e82e5675","name":"Dr. E2E","email":"e2e-doc-1791561472766@test.dev","image":null,"isActive":true,"mustChangePassword":false},"clinic":{"id":"83cb03c6-dd8c-4028-bd1b-40180c0f1bd0","name":"E2E Clinic 1791561472766","city":"Paris","timezone":"Europe/Paris"},"specialty":{"id":"3d9a91bf-9f86-430e-99af-0fe86fc0bc4c","name":"E2E Cardio 1791561472766"}},{"id":"91039e53-85b4-48f7-8520-eaec9305f1df","slotDurationMinutes":30,"bio":null,"isActive":true,"createdAt":"2026-10-09T14:24:09.613Z","updatedAt":"2026-10-09T14:24:12.260Z","user":{"id":"b0fa7e30-4fab-49a8-8e96-5dc025c3c39d","name":"Dr. E2E","email":"e2e-doc-1791555848786@test.dev","image":null,"isActive":true,"mustChangePassword":false},"clinic":{"id":"14046b66-6559-4d2a-9384-1ead6333a877","name":"E2E Clinic 1791555848786","city":"Paris","timezone":"Europe/Paris"},"specialty":{"id":"15d880b6-cab1-4566-82f4-8c2fbdbffcbd","name":"E2E Cardio 1791555848786"}},{"id":"d1dd7080-2cda-4079-93f7-0eec449bc791","slotDurationMinutes":30,"bio":null,"isActive":true,"createdAt":"2026-10-09T14:22:55.728Z","updatedAt":"2026-10-09T14:22:57.921Z","user":{"id":"ec8ed749-0fe5-416d-bd11-1c88217db5b4","name":"Dr. E2E","email":"e2e-doc-1791555774889@test.dev","image":null,"isActive":true,"mustChangePassword":false},"clinic":{"id":"05254e38-d2ba-4c10-86c6-14c3ea262038","name":"E2E Clinic 1791555774889","city":"Paris","timezone":"Europe/Paris"},"specialty":{"id":"1de80e7f-fe1f-4b49-b7f5-b4a82b6aacbe","name":"E2E Cardio 1791555774889"}}]}
+
+=== GET /admin/audit-logs?page=1&pageSize=5
+status: 200
+{"success":true,"message":"Audit logs","meta":{"page":1,"pageSize":5,"total":630},"data":[{"id":"2c4ed919-a985-4974-ad37-972189fcf468","actorId":"868c94fb-0f75-40ce-95e5-6bfece7cafb1","actorRole":"ADMIN","action":"AUTH_LOGIN_SUCCESS","entityType":null,"entityId":null,"metadata":null,"ip":"::1","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; fr-FR) WindowsPowerShell/5.1.26100.9549","createdAt":"2026-10-15T10:23:17.609Z","actor":{"id":"868c94fb-0f75-40ce-95e5-6bfece7cafb1","email":"saurav.barua.dev@gmail.com","name":"Platform Admin"}},{"id":"bfea4119-3b01-40af-8a32-186244a81d2f","actorId":"868c94fb-0f75-40ce-95e5-6bfece7cafb1","actorRole":"ADMIN","action":"AUTH_LOGIN_SUCCESS","entityType":null,"entityId":null,"metadata":null,"ip":"::1","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; fr-FR) WindowsPowerShell/5.1.26100.9549","createdAt":"2026-10-15T10:20:47.781Z","actor":{"id":"868c94fb-0f75-40ce-95e5-6bfece7cafb1","email":"saurav.barua.dev@gmail.com","name":"Platform Admin"}},{"id":"b638c360-007a-49b9-b42f-548a77160cb7","actorId":"868c94fb-0f75-40ce-95e5-6bfece7cafb1","actorRole":"ADMIN","action":"AUTH_LOGIN_SUCCESS","entityType":null,"entityId":null,"metadata":null,"ip":"::1","userAgent":"Mozilla/5.0 (Windows NT; Windows NT 10.0; fr-FR) WindowsPowerShell/5.1.26100.9549","createdAt":"2026-10-15T10:19:43.456Z","actor":{"id":"868c94fb-0f75-40ce-95e5-6bfece7cafb1","email":"saurav.barua.dev@gmail.com","name":"Platform Admin"}},{"id":"a7c6189b-6061-4020-b914-e58030e84796","actorId":"4f39326c-c8a2-4546-8985-76de4156e6f3","actorRole":"DOCTOR","action":"AUTH_LOGIN_SUCCESS","entityType":null,"entityId":null,"metadata":null,"ip":"::1","userAgent":"node","createdAt":"2026-10-15T09:55:43.518Z","actor":{"id":"4f39326c-c8a2-4546-8985-76de4156e6f3","email":"mr.sauravbarua@g ...[truncated]
+
+=== GET /admin/dashboard
+status: 404
+
+
+=== GET /dashboard/admin
+status: 200
+{"success":true,"message":"Admin dashboard","meta":null,"data":{"generatedAt":"2026-10-15T10:23:18.117Z","timezone":"Europe/Paris","users":{"patients":12,"doctors":5,"admins":1,"newPatientsLast30Days":12},"catalog":{"activeDoctors":5,"inactiveDoctors":0,"clinics":5,"specialties":5},"appointments":{"byStatus":{"BOOKED":10,"CANCELLED":4,"COMPLETED":0},"today":0,"next7Days":2,"past30Days":8},"dailyBookings":[{"date":"2026-09-16","count":0},{"date":"2026-09-17","count":0},{"date":"2026-09-18","count":0},{"date":"2026-09-19","count":0},{"date":"2026-09-20","count":0},{"date":"2026-09-21","count":0},{"date":"2026-09-22","count":0},{"date":"2026-09-23","count":0},{"date":"2026-09-24","count":0},{"date":"2026-09-25","count":0},{"date":"2026-09-26","count":0},{"date":"2026-09-27","count":0},{"date":"2026-09-28","count":0},{"date":"2026-09-29","count":0},{"date":"2026-09-30","count":0},{"date":"2026-10-01","count":0},{"date":"2026-10-02","count":0},{"date":"2026-10-03","count":0},{"date":"2026-10-04","count":0},{"date":"2026-10-05","count":0},{"date":"2026-10-06","count":0},{"date":"2026-10-07","count":0},{"date":"2026-10-08","count":0},{"date":"2026-10-09","count":0},{"date":"2026-10-10","count":8},{"date":"2026-10-11","count":0},{"date":"2026-10-12","count":0},{"date":"2026-10-13","count":0},{"date":"2026-10-14","count":0},{"date":"2026-10-15","count":0}],"topDoctors":[{"doctorId":"21d4faa4-430c-41b2-be54-6e3a460166b9","name":"Dr. Camille Dubois","specialty":"Cardiology","appointments":5},{"doctorId":"d1dd7080-2cda-4079-93f7-0eec449bc791","name":"Dr. E2E","specialty":"E2E Cardio 1791555774889","appointments":1},{"doctorId":"cfb56c72-9609-44c3-a539-65e5201eba2a","name":"Dr. E2E","specialty":"E2E Cardio 1791561472766","appointments":1},{"doctorId":"91039e53-85b4-48f7-8520-eaec930 ...[truncated]
+
+=== GET /dashboard
+status: 404
+
+
+=== POST /admin/specialties
+status: 400
+
+
+=== POST /admin/clinics
+status: 400
+
+
+=== POST /admin/doctors
+status: 400
+
+
+=== GET /admin/specialties
+status: 401
+
+
+=== admin schema files
+--- C:\Users\saura\Downloads\repositories\doctor-appointment-api\src\modules\audit\audit.schema.ts
+import { z } from 'zod';
+import { AuditAction, type AuditActionValue } from './audit.actions.js';
+
+const actions = Object.values(AuditAction) as [AuditActionValue, ...AuditActionValue[]];
+
+export const listAuditLogsQuery = z
+  .object({
+    page: z.coerce.number().int().min(1).default(1),
+    pageSize: z.coerce.number().int().min(1).max(100).default(20),
+    actorId: z.string().min(1).max(64).optional(),
+    action: z.enum(actions).optional(),
+    entityType: z.string().min(1).max(50).optional(),
+    entityId: z.string().min(1).max(64).optional(),
+    from: z.coerce.date().optional(),
+    to: z.coerce.date().optional(),
+  })
+  .refine((q) => !q.from || !q.to || q.from <= q.to, {
+    message: '`from` must not be after `to`',
+    path: ['from'],
+  });
+
+export type ListAuditLogsQuery = z.infer<typeof listAuditLogsQuery>;
+
+--- C:\Users\saura\Downloads\repositories\doctor-appointment-api\src\modules\clinics\clinics.schema.ts
+import { z } from 'zod';
+import { booleanQuery, paginationShape } from '../../utils/schemas.js';
+
+function isValidTimeZone(tz: string): boolean {
+  if (tz !== 'UTC' && !/^[A-Za-z]+\/[A-Za-z0-9_+\-/]+$/.test(tz)) return false;
+  try {
+    Intl.DateTimeFormat('en-US', { timeZone: tz });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const timezone = z
+  .string()
+  .trim()
+  .refine(isValidTimeZone, 'Must be an IANA time zone such as Europe/Paris');
+const name = z.string().trim().min(2).max(120);
+const city = z.string().trim().min(2).max(80);
+const address = z.string().trim().min(5).max(200);
+
+export const createClinicBody = z.object({ name, city, address, timezone });
+
+export const updateClinicBody = z.object({
+  name: name.optional(),
+  city: city.optional(),
+  address: address.optional(),
+  timezone: timezone.optional(),
+  isActive: z.boolean().optional(),
+});
+
+export const publicListQuery = z.object({
+  ...paginationShape,
+  search: z.string().trim().min(1).max(120).optional(),
+  city: z.string().trim().min(1).max(80).optional(),
+});
+
+export const adminListQuery = publicListQuery.extend({ isActive: booleanQuery });
+
+export type CreateClinicBody = z.infer<typeof createClinicBody>;
+export type UpdateClinicBody = z.infer<typeof updateClinicBody>;
+export type PublicListQuery = z.infer<typeof publicListQuery>;
+export type AdminListQuery = z.infer<typeof adminListQuery>;
+
+--- C:\Users\saura\Downloads\repositories\doctor-appointment-api\src\modules\doctors\doctors.schema.ts
+import { z } from 'zod';
+import { booleanQuery, paginationShape } from '../../utils/schemas.js';
+
+export const createDoctorBody = z.object({
+  name: z.string().trim().min(2).max(100),
+  email: z.string().trim().toLowerCase().pipe(z.email()),
+  clinicId: z.uuid(),
+  specialtyId: z.uuid(),
+  slotDurationMinutes: z.number().int().min(10).max(120).multipleOf(5).default(30),
+  bio: z.string().trim().max(1000).optional(),
+});
+
+export const updateDoctorBody = z.object({
+  specialtyId: z.uuid().optional(),
+  bio: z.string().trim().max(1000).nullable().optional(),
+  isActive: z.boolean().optional(),
+});
+
+export const adminListQuery = z.object({
+  ...paginationShape,
+  search: z.string().trim().min(1).max(100).optional(),
+  clinicId: z.uuid().optional(),
+  specialtyId: z.uuid().optional(),
+  isActive: booleanQuery,
+});
+
+export type CreateDoctorBody = z.infer<typeof createDoctorBody>;
+export type UpdateDoctorBody = z.infer<typeof updateDoctorBody>;
+export type AdminListQuery = z.infer<typeof adminListQuery>;
+
+--- C:\Users\saura\Downloads\repositories\doctor-appointment-api\src\modules\doctors\doctorsPublic.schema.ts
+import { z } from 'zod';
+import { idParams, paginationShape } from '../../utils/schemas.js';
+
+export { idParams };
+
+const text = z.string().trim().min(1).max(100);
+
+export const searchDoctorsQuery = z.object({
+  ...paginationShape,
+  q: text.optional(),
+  city: text.optional(),
+  specialtyId: idParams.shape.id.optional(),
+  clinicId: idParams.shape.id.optional(),
+});
+
+export const slotsQuery = z.object({
+  from: z.iso.date().optional(),
+  to: z.iso.date().optional(),
+});
+
+export type SearchDoctorsQuery = z.infer<typeof searchDoctorsQuery>;
+export type SlotsQuery = z.infer<typeof slotsQuery>;
+
+--- C:\Users\saura\Downloads\repositories\doctor-appointment-api\src\modules\specialties\specialties.schema.ts
+import { z } from 'zod';
+import { booleanQuery, paginationShape } from '../../utils/schemas.js';
+
+const name = z.string().trim().min(2).max(80);
+
+export const createSpecialtyBody = z.object({ name });
+
+export const updateSpecialtyBody = z.object({
+  name: name.optional(),
+  isActive: z.boolean().optional(),
+});
+
+export const publicListQuery = z.object({
+  ...paginationShape,
+  search: z.string().trim().min(1).max(80).optional(),
+});
+
+export const adminListQuery = publicListQuery.extend({ isActive: booleanQuery });
+
+export type CreateSpecialtyBody = z.infer<typeof createSpecialtyBody>;
+export type UpdateSpecialtyBody = z.infer<typeof updateSpecialtyBody>;
+export type PublicListQuery = z.infer<typeof publicListQuery>;
+export type AdminListQuery = z.infer<typeof adminListQuery>;
+

@@ -24,7 +24,7 @@ function emailFrom(req: Request): string | null {
 }
 
 export function createLimiter(config: LimiterConfig) {
-  const disabled = env.NODE_ENV === 'test' && !config.enforceInTest;
+  const disabled = env.NODE_ENV === 'test' ? !config.enforceInTest : env.RATE_LIMIT_DISABLED;
 
   return rateLimit({
     windowMs: config.windowMs,

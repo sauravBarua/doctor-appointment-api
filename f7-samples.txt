@@ -1,0 +1,45 @@
+
+=== POST /auth/login
+status: 200
+{"success":true,"message":"Signed in","meta":null,"data":{"accessToken":"[redacted]","sessionToken":"[redacted]","mustChangePassword":false,"user":{"id":"TOxi6Zylfqaqyzz5bfb9fTsDXYa6bl1O","name":"Alice Martin","email":"m.barua.saurav@gmail.com","image":null,"role":"PATIENT","emailVerified":true,"mustChangePassword":false,"createdAt":"2026-10-09T09:49:04.781Z"}}}
+
+=== GET /auth/me
+status: 200
+{"success":true,"message":"Current user","meta":null,"data":{"id":"TOxi6Zylfqaqyzz5bfb9fTsDXYa6bl1O","name":"Alice Martin","email":"m.barua.saurav@gmail.com","image":null,"role":"PATIENT","emailVerified":true,"mustChangePassword":false,"createdAt":"2026-10-09T09:49:04.781Z"}}
+
+=== GET /users/me
+status: 404
+
+
+=== PATCH /users/me (multipart data={"name":"Alice Martin"})
+{"success":true,"message":"Profile updated","meta":null,"data":{"id":"TOxi6Zylfqaqyzz5bfb9fTsDXYa6bl1O","name":"Alice Martin","email":"m.barua.saurav@gmail.com","image":null,"role":"PATIENT","emailVerified":true,"mustChangePassword":false,"createdAt":"2026-10-09T09:49:04.781Z"}}
+status: 200
+
+=== PATCH /users/me (multipart data={"name":"x"})
+{"success":false,"message":"Validation failed","meta":null,"data":null,"error":{"code":"VALIDATION_ERROR","details":[{"source":"body","field":"name","message":"Too small: expected string to have >=2 characters"}]}}
+status: 400
+
+=== PATCH /users/me (multipart data={})
+{"success":false,"message":"Provide at least one field or an image","meta":null,"data":null,"error":{"code":"VALIDATION_ERROR"}}
+status: 400
+
+=== PATCH /users/me (multipart data={"email":"other@example.com"})
+{"success":false,"message":"Provide at least one field or an image","meta":null,"data":null,"error":{"code":"VALIDATION_ERROR"}}
+status: 400
+
+=== GET /users/me
+status: 404
+
+
+=== users schema files
+--- C:\Users\saura\Downloads\repositories\doctor-appointment-api\src\modules\users\users.schema.ts
+import { z } from 'zod';
+
+// Unknown keys (such as email) are stripped by Zod, so they can never be changed here.
+export const updateProfileBody = z.object({
+  name: z.string().trim().min(2).max(100).optional(),
+  bio: z.string().trim().max(1000).nullable().optional(),
+});
+
+export type UpdateProfileBody = z.infer<typeof updateProfileBody>;
+
